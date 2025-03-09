@@ -3,7 +3,9 @@ function fetchGrades() {
     fetch('https://conjuntaweb.onrender.com/calculateGrade')
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al obtener las notas');
+                return response.json().then(err => {
+                    throw new Error(`Error ${response.status}: ${err.message || response.statusText}`);
+                });
             }
             return response.json();
         })
@@ -25,7 +27,7 @@ function fetchGrades() {
             });
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Hubo un problema al cargar las notas');
+            console.error('Error detallado:', error);
+            alert(`Hubo un problema al cargar las notas: ${error.message}`);
         });
 }
